@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Pesan Kamar {{ room.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h1 class="mb-4 text-success">Konfirmasi Pemesanan</h1>
+        
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0 fw-bold">Kamar: {{ room.name }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Check-in:</strong> {{ check_in }}</p>
+                        <p class="mb-1"><strong>Check-out:</strong> {{ check_out }}</p>
+                        <p class="mb-1"><strong>Lama Menginap:</strong> {{ days }} Malam</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p class="mb-1"><strong>Harga per Malam:</strong> Rp{{ "{:,.0f}".format(room.price) }}</p>
+                        <h4 class="text-danger fw-bold">Total Biaya: Rp{{ "{:,.0f}".format(total_cost) }}</h4>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3 text-success">Detail Kontak Pemesan</h5>
+                <form method="POST" action="{{ url_for('reserve') }}">
+                    <input type="hidden" name="room_id" value="{{ room.id }}">
+                    <input type="hidden" name="check_in" value="{{ check_in }}">
+                    <input type="hidden" name="check_out" value="{{ check_out }}">
+                    <input type="hidden" name="guests" value="{{ guests }}">
+
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Nomor Telepon</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 fw-bold mt-3">
+                        Check-in
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

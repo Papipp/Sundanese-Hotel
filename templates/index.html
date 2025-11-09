@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Cari Kamar{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <h1 class="text-center mb-4 text-success fw-bold">Temukan Kamar Sempurna Anda</h1>
+        
+        <!-- Formulir Pencarian Kamar -->
+        <div class="card shadow-lg mb-5">
+            <div class="card-body">
+                <h5 class="card-title text-success">Kriteria Pencarian</h5>
+                <form method="POST" action="{{ url_for('index') }}">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label for="check_in" class="form-label">Check-in</label>
+                            <input type="date" class="form-control" id="check_in" name="check_in" value="{{ search_params.check_in }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="check_out" class="form-label">Check-out</label>
+                            <input type="date" class="form-control" id="check_out" name="check_out" value="{{ search_params.check_out }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="guests" class="form-label">Tamu</label>
+                            <input type="number" class="form-control" id="guests" name="guests" value="{{ search_params.guests }}" min="1" required>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-search"></i> Cari Kamar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Hasil Pencarian Kamar -->
+        <h2 class="mb-3">Kamar Tersedia</h2>
+        
+        {% if rooms %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for room in rooms %}
+                <div class="col">
+                    <div class="card h-100 shadow-lg border-2 room-card">
+                        <div class="card-img-top">
+                            <img src="{{ room.img_url }}" alt="Kamar {{ room.name }}" class="img-fluid">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ room.name }}</h5>
+                            <p class="card-text text-muted small">{{ room.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="fs-4 fw-bold text-danger">Rp{{ "{:,.0f}".format(room.price) }}</span>
+                                <span class="badge bg-secondary">/ malam</span>
+                            </div>
+                            <p class="card-text">
+                                <i class="bi bi-people me-1"></i> Kapasitas: {{ room.capacity }} Tamu
+                            </p>
+                            <a href="{{ url_for('booking', room_id=room.id, check_in=search_params.check_in, check_out=search_params.check_out, guests=search_params.guests) }}" 
+                               class="btn btn-warning w-100 fw-bold">
+                                Pesan Sekarang
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                Silakan masukkan tanggal check-in dan check-out, lalu tekan "Cari Kamar" untuk melihat ketersediaan.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
