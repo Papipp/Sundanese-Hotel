@@ -1,11 +1,7 @@
-🛎️ SIMRS HOTEL RESERVATION SYSTEMSistem Informasi Manajemen Reservasi Hotel Berbasis FlaskStatus ProyekLisensiBahasa UtamaFrameworkAplikasi web reservasi hotel sederhana yang dibangun menggunakan Python Flask sebagai backend yang efisien, Jinja2 untuk rendering tampilan, dan Bootstrap 5 untuk antarmuka pengguna yang modern dan responsif.Proyek ini dikembangkan melalui kolaborasi empat anggota tim, mempraktikkan arsitektur yang terstruktur dan pembagian tugas yang jelas.✨ Fitur Kunci SistemKami berfokus pada pengalaman pengguna yang bersih dan fungsionalitas admin yang tangguh.FungsionalitasDeskripsiKomponen TerlibatPencarian CerdasFilter kamar berdasarkan tanggal Check-in dan Check-out serta jumlah tamu yang akurat. Validasi Tanggal Otomatis (tidak bisa memilih masa lalu).index.html, app.pyManajemen Kamar (CRUD)Administrator dapat menambah, melihat, mengedit, dan menghapus data kamar, termasuk mengunggah URL Gambar untuk visualisasi.dashboard.html, models.pyKeamanan MinimalisImplementasi Pola Post-Redirect-Get (PRG) di semua formulir (mencegah form resubmission) dan konfirmasi penghapusan menggunakan Modal Bootstrap yang elegan.app.py, base.htmlDatabase SimulasiData kamar dan reservasi disimpan dalam memori Python (models.py) untuk kemudahan pengembangan cepat.models.py👥 Tim Kolaborasi: 4 KontributorProyek ini adalah hasil kerja tim dari 4 anggota dengan spesialisasi peran masing-masing:KontributorPeran UtamaFokus Kontribusi[Nama Anggota 1]Backend LeadStruktur aplikasi Flask, Routing (app.py), Logika Ketersediaan Kamar.[Nama Anggota 2]Database & APIDesain Data Kamar/Reservasi (models.py), implementasi fungsi CRUD backend.[Nama Anggota 3]Frontend UI/UXDesain Halaman Utama dan Booking, Integrasi Bootstrap 5 (index.html, booking.html).[Nama Anggota 4]Admin & StylingPengembangan Dashboard Admin, Penyesuaian CSS Kustom (style.css), Perbaikan Bug UI.🛠 Panduan Instalasi dan Menjalankan Proyek1. PrasyaratPastikan Python 3.10+ terinstal.Pastikan pip adalah manajer paket yang terbaru.2. Instalasi DependensiInstal framework Flask:pip install Flask
-3. Struktur DirektoriPastikan semua file diletakkan sesuai dengan struktur berikut:reservasi-hotel/
-├── app.py
-├── models.py
-├── static/
-│   └── css/
-│       └── style.css
-└── templates/
-    └── ... (semua file HTML di dalamnya)
-4. Menjalankan ServerJalankan server pengembangan Flask:python app.py
-Aplikasi akan tersedia di: http://127.0.0.1:5000/🔑 Akses AdministratorAkses Dashboard Admin digunakan untuk manajemen data kamar dan reservasi.RuteUsernamePassword/admin/loginadminpasswordCatatan: Untuk deployment, pastikan untuk mengganti kredensial sederhana ini dengan sistem otentikasi yang lebih aman.
+# Sundanese Hotel
+
+Team Project
+1.Apip Akmalul iman
+2.Handi Azis
+3.Muhammad Rafif Atallah
+4.Novan Banyoe Respati
