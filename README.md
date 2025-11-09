@@ -1,104 +1,11 @@
-🏨 Sistem Reservasi Hotel Sederhana (Flask & Bootstrap)
-
-Sistem Reservasi Hotel sederhana yang dibangun menggunakan Python Flask sebagai backend, Jinja2 untuk templating, dan Bootstrap 5 untuk frontend yang responsif dan menarik.
-
-Aplikasi ini mendukung fungsi pencarian kamar, pemesanan (reservasi), dan panel administrasi lengkap dengan operasi CRUD (Create, Read, Update, Delete) untuk manajemen kamar dan reservasi.
-
-✨ Fitur Utama
-
-Pencarian Kamar Dinamis: Mencari kamar berdasarkan tanggal Check-in, Check-out, dan jumlah tamu.
-
-Validasi Tanggal: Mencegah pemesanan di masa lalu, dan memastikan tanggal check-out selalu setelah check-in.
-
-Reservasi User: Proses pemesanan yang mudah untuk tamu.
-
-Panel Administrasi:
-
-CRUD lengkap untuk manajemen data kamar (Tambah, Lihat, Edit, Hapus).
-
-Input URL Gambar untuk setiap kamar.
-
-Manajemen dan pembatalan reservasi yang ada.
-
-Frontend Responsif: Menggunakan Bootstrap 5 untuk tampilan yang mobile-friendly.
-
-Pola PRG (Post-Redirect-Get): Mencegah browser menampilkan notifikasi "Konfirmasi Pengiriman Ulang Formulir" saat refresh atau back.
-
-📂 Struktur Proyek
-
-reservasi-hotel/
-├── app.py              # Logika Utama Flask, Routes, dan Controller
-├── models.py           # Simulasi Database (Data Kamar & Reservasi dalam list Python)
+🛎️ SIMRS HOTEL RESERVATION SYSTEMSistem Informasi Manajemen Reservasi Hotel Berbasis FlaskStatus ProyekLisensiBahasa UtamaFrameworkAplikasi web reservasi hotel sederhana yang dibangun menggunakan Python Flask sebagai backend yang efisien, Jinja2 untuk rendering tampilan, dan Bootstrap 5 untuk antarmuka pengguna yang modern dan responsif.Proyek ini dikembangkan melalui kolaborasi empat anggota tim, mempraktikkan arsitektur yang terstruktur dan pembagian tugas yang jelas.✨ Fitur Kunci SistemKami berfokus pada pengalaman pengguna yang bersih dan fungsionalitas admin yang tangguh.FungsionalitasDeskripsiKomponen TerlibatPencarian CerdasFilter kamar berdasarkan tanggal Check-in dan Check-out serta jumlah tamu yang akurat. Validasi Tanggal Otomatis (tidak bisa memilih masa lalu).index.html, app.pyManajemen Kamar (CRUD)Administrator dapat menambah, melihat, mengedit, dan menghapus data kamar, termasuk mengunggah URL Gambar untuk visualisasi.dashboard.html, models.pyKeamanan MinimalisImplementasi Pola Post-Redirect-Get (PRG) di semua formulir (mencegah form resubmission) dan konfirmasi penghapusan menggunakan Modal Bootstrap yang elegan.app.py, base.htmlDatabase SimulasiData kamar dan reservasi disimpan dalam memori Python (models.py) untuk kemudahan pengembangan cepat.models.py👥 Tim Kolaborasi: 4 KontributorProyek ini adalah hasil kerja tim dari 4 anggota dengan spesialisasi peran masing-masing:KontributorPeran UtamaFokus Kontribusi[Nama Anggota 1]Backend LeadStruktur aplikasi Flask, Routing (app.py), Logika Ketersediaan Kamar.[Nama Anggota 2]Database & APIDesain Data Kamar/Reservasi (models.py), implementasi fungsi CRUD backend.[Nama Anggota 3]Frontend UI/UXDesain Halaman Utama dan Booking, Integrasi Bootstrap 5 (index.html, booking.html).[Nama Anggota 4]Admin & StylingPengembangan Dashboard Admin, Penyesuaian CSS Kustom (style.css), Perbaikan Bug UI.🛠 Panduan Instalasi dan Menjalankan Proyek1. PrasyaratPastikan Python 3.10+ terinstal.Pastikan pip adalah manajer paket yang terbaru.2. Instalasi DependensiInstal framework Flask:pip install Flask
+3. Struktur DirektoriPastikan semua file diletakkan sesuai dengan struktur berikut:reservasi-hotel/
+├── app.py
+├── models.py
 ├── static/
 │   └── css/
-│       └── style.css   # CSS Kustom untuk Styling Tambahan
+│       └── style.css
 └── templates/
-    ├── base.html       # Layout Dasar (Header, Footer, link Bootstrap 5)
-    ├── index.html      # Halaman Utama (Cari Kamar & Tampilkan Hasil)
-    ├── booking.html    # Halaman Konfirmasi dan Detail Booking
-    └── admin/
-        ├── login.html  # Halaman Login Admin
-        └── dashboard.html # Panel Admin (CRUD Kamar dan Reservasi)
-
-
-🛠 Instalasi dan Menjalankan Proyek
-
-1. Prasyarat
-
-Pastikan Anda telah menginstal Python 3.x dan pip.
-
-2. Instalasi Flask
-
-Instal framework Flask dan paket-paket lain yang diperlukan:
-
-pip install Flask
-
-
-3. Menjalankan Aplikasi
-
-Jalankan file utama aplikasi dari direktori proyek:
-
-python app.py
-
-
-Aplikasi akan berjalan di http://127.0.0.1:5000/.
-
-🔒 Akses Administrator
-
-Akses ke Panel Admin dilindungi oleh sesi sederhana.
-
-URL
-
-Rute
-
-/admin/login
-
-Halaman Login Admin
-
-/admin/dashboard
-
-Dashboard Utama Admin
-
-Kredensial Login
-
-Username
-
-Password
-
-admin
-
-password
-
-⚙️ Pengembangan Lanjutan
-
-Database
-
-Saat ini, data disimpan dalam variabel list Python di models.py. Untuk aplikasi siap produksi, Anda dapat menggantinya dengan:
-
-SQLite/PostgreSQL/MySQL menggunakan SQLAlchemy atau Flask-SQLAlchemy.
-
-Firestore/MongoDB untuk solusi NoSQL.
-
-Validasi
-
-Semua validasi (tanggal, guests) saat ini dilakukan secara sederhana di app.py. Untuk validasi formulir yang lebih kuat, pertimbangkan menggunakan Flask-WTF.
+    └── ... (semua file HTML di dalamnya)
+4. Menjalankan ServerJalankan server pengembangan Flask:python app.py
+Aplikasi akan tersedia di: http://127.0.0.1:5000/🔑 Akses AdministratorAkses Dashboard Admin digunakan untuk manajemen data kamar dan reservasi.RuteUsernamePassword/admin/loginadminpasswordCatatan: Untuk deployment, pastikan untuk mengganti kredensial sederhana ini dengan sistem otentikasi yang lebih aman.
