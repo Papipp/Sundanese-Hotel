@@ -64,3 +64,7 @@ main {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
+
+#loginkan .card-header, #loginkan .btn {
+    background-color: #4d8dc9ff;
+}
