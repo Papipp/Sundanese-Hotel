@@ -36,20 +36,9 @@
                 </div>
             </div>
         </section>
-        
-        <!-- Section 2: Promo Hotel -->
-        <section id="promo-hotel" class="mb-5">
-            <div class="card shadow-sm border-success">
-                <div class="card-body text-center">
-                    <h3 class="text-success mb-3 fw-bold">🎉 Promo Spesial Bulan Ini!</h3>
-                    <p class="mb-4">Nikmati diskon hingga <span class="fw-bold text-danger">30%</span> untuk pemesanan kamar Deluxe dan Suite selama bulan ini.</p>
-                    <a href="#form-pencarian" class="btn btn-outline-success fw-bold">Pesan Sekarang</a>
-                </div>
-            </div>
-        </section>
 
-        <!-- Section 3: Hasil Pencarian Kamar -->
-        <section id="hasil-pencarian">
+        <!-- Section 2: Hasil Pencarian Kamar -->
+        <section id="hasil-pencarian" class="mb-5">
             <h2 class="mb-3">Kamar Tersedia</h2>
             
             {% if rooms %}
@@ -84,6 +73,25 @@
                     Silakan masukkan tanggal check-in dan check-out, lalu tekan "Cari Kamar" untuk melihat ketersediaan.
                 </div>
             {% endif %}
+        </section>
+
+        <!-- Section 3: Informasi Hotel -->
+        <section id="informasi-hotel" class="mb-5">
+            <div class="card shadow-sm border-success">
+                <div class="card-body text-center">
+                    <h3 class="text-success mb-3 fw-bold">🏨 Informasi Terkait Hotel</h3>
+                    <p class="mb-4">
+                        Sundanese Hotel terletak di kawasan eksotis <span class="fw-bold">Eropa Belah Kidul</span>,  
+                        menghadirkan suasana yang tenang dengan pemandangan indah dan pelayanan ramah.  
+                        Hotel ini cocok untuk liburan keluarga, pasangan, maupun perjalanan bisnis.
+                    </p>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="bi bi-geo-alt text-success"></i> Lokasi: Eropa Belah Kidul</li>
+                        <li><i class="bi bi-telephone text-success"></i> Telepon: (022) 555-1234</li>
+                        <li><i class="bi bi-envelope text-success"></i> Email: info@sundanesehotel.com</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
         <!-- Section 4: Fasilitas Unggulan -->
