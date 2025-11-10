@@ -32,9 +32,8 @@ main {
     background-color: #e9ecef; /* Light gray on hover */
 }
 
-/* Warna success (hijau) yang dominan */
 .bg-success {
-    background-color: #198754 !important; /* Warna hijau Bootstrap default */
+    background-color: #198754 !important;
 }
 .btn-success {
     background-color: #198754;
@@ -63,4 +62,8 @@ main {
 .navbar {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+#loginkan .card-header, #loginkan .btn {
+    background-color: #4d8dc9ff;
 }
