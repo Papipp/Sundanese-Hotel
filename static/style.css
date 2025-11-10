@@ -32,9 +32,8 @@ main {
     background-color: #e9ecef; /* Light gray on hover */
 }
 
-/* Warna success (hijau) yang dominan */
 .bg-success {
-    background-color: #198754 !important; /* Warna hijau Bootstrap default */
+    background-color: #198754 !important;
 }
 .btn-success {
     background-color: #198754;
