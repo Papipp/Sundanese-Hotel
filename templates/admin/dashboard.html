@@ -14,7 +14,7 @@
             </div>
             <div class="card-body">
                 
-                <!-- Formulir Tambah/Edit Kamar -->
+                <!-- Formulir update kamar -->
                 <h5 class="mb-3">{% if edit_room %}Edit Kamar ID {{ edit_room.id }}{% else %}Tambah Kamar Baru{% endif %}</h5>
                 <form method="POST" action="{{ url_for('admin_room_crud') }}">
                     <input type="hidden" name="id" value="{{ edit_room.id if edit_room else '' }}">
@@ -36,7 +36,7 @@
                     </div>
                     {% if edit_room %}
                         <div class="mb-3">
-                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">Batal Edit</a>
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">Batalkan</a>
                         </div>
                     {% endif %}
                 </form>
