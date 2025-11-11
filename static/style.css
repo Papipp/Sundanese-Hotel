@@ -1,5 +1,3 @@
-
-/* Mengatur font untuk tampilan yang lebih modern */
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffffff; 
@@ -10,60 +8,4 @@ body {
 
 .navbar {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-
-/* Mengatur agar main content mengambil sisa ruang */
-main {
-    flex: 1;
-}
-
-#hero {
-    height: 200px;
-    background-color: #84efff91; 
-}
-
-/* Penyesuaian untuk card kamar */
-.room-card .card-body {
-    transition: background-color 0.3s;
-}
-
-.room-card:hover .card-body {
-    background-color: #e9ecef; /* Light gray on hover */
-}
-
-.bg-success {
-    background-color: #198754 !important;
-}
-.btn-success {
-    background-color: #198754;
-    border-color: #198754;
-}
-.btn-success:hover {
-    background-color: #157347;
-    border-color: #146c43;
-}
-.text-success {
-    color: #198754 !important;
-}
-
-/* Warna warning/accent (kuning) untuk tombol utama */
-.btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #343a40; /* Darker text for visibility */
-}
-.btn-warning:hover {
-    background-color: #ffcd39;
-    border-color: #ffc107;
-}
-
-/* Mengurangi padding pada navbar */
-.navbar {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-#loginkan .card-header, #loginkan .btn {
-    background-color: #4d8dc9ff;
 }

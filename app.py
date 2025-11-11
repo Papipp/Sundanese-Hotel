@@ -3,7 +3,7 @@ import datetime
 from models import get_all_rooms, get_room_by_id, is_room_available, create_reservation, get_all_reservations, add_or_update_room, delete_room, delete_reservation
 
 app = Flask(__name__)
-app.secret_key = 'Sundanese' # Penting untuk session dan flash
+app.secret_key = 'Sundanese' 
 
 # --- Helper Functions ---
 
@@ -124,7 +124,7 @@ def admin_login():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        # Validasi sederhana
+        # Validasi Login
         if username == 'admin' and password == 'sundanese':
             session['logged_in'] = True
             flash('Login Admin Berhasil!', 'success')
@@ -138,7 +138,7 @@ def admin_login():
 def admin_logout():
     """Logout admin."""
     session.pop('logged_in', None)
-    flash('Anda telah logout.', 'success')
+    flash('Anda telah logout.', 'warning')
     return redirect(url_for('index'))
 
 @app.route('/admin/dashboard', methods=['GET'])
