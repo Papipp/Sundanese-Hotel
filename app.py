@@ -5,10 +5,10 @@ from models import get_all_rooms, get_room_by_id, is_room_available, create_rese
 app = Flask(__name__)
 app.secret_key = 'Sundanese' 
 
-# --- Helper Functions ---
+# --- Pembatasan sesi ---
+# Decorator untuk membatasi akses ke admin
 
 def login_required(f):
-    """Decorator untuk membatasi akses ke admin."""
     def dash(*posisi, **konfigurasi):
         if not session.get('logged_in'):
             flash('Anda perlu login sebagai administrator.', 'danger')
@@ -18,10 +18,10 @@ def login_required(f):
     return dash
 
 # --- Route User ---
+# Homepage dan Pencarian Kamar
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """Halaman utama: mencari kamar dan menampilkan hasil."""
     available_rooms = []
     
     # Set tanggal default untuk form
@@ -58,9 +58,10 @@ def index():
 
     return render_template('index.html', rooms=available_rooms, search_params=search_params)
 
+#Halaman Booking dan Reservasi
+
 @app.route('/book/<int:room_id>', methods=['GET'])
 def booking(room_id):
-    """Halaman booking: menampilkan detail kamar dan formulir."""
     room = get_room_by_id(room_id)
     
     # Ambil parameter tanggal dari URL (jika ada)
@@ -88,9 +89,9 @@ def booking(room_id):
         
     return render_template('booking.html', room=room, check_in=check_in, check_out=check_out, guests=guests, total_cost=total_cost, days=days)
 
+#memproses formulir reservasi dan menyimpan data / create
 @app.route('/reserve', methods=['POST'])
 def reserve():
-    """Memproses formulir reservasi dan menyimpan data (CRUD - Create)."""
     room_id = int(request.form.get('room_id'))
     
     # Membuat objek form_data sederhana
@@ -113,10 +114,9 @@ def reserve():
         return redirect(url_for('index'))
 
 # --- Admin Routes ---
-
+#Login Admin
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    """Login admin."""
     if session.get('logged_in'):
         return redirect(url_for('admin_dashboard'))
         
@@ -134,17 +134,17 @@ def admin_login():
             
     return render_template('admin/login.html')
 
+#Logout Admin
 @app.route('/admin/logout')
 def admin_logout():
-    """Logout admin."""
     session.pop('logged_in', None)
     flash('Anda telah logout.', 'warning')
     return redirect(url_for('index'))
 
+#Dashboard yang bisa dikses admin setelah login, serta menampilkan data kamar dan reservasi
 @app.route('/admin/dashboard', methods=['GET'])
 @login_required
 def admin_dashboard():
-    """Dashboard admin: menampilkan data kamar dan reservasi (CRUD - Read)."""
     rooms = get_all_rooms()
     reservations = get_all_reservations()
     
@@ -157,11 +157,10 @@ def admin_dashboard():
     return render_template('admin/dashboard.html', rooms=rooms, reservations=reservations, edit_room=edit_room)
 
 # --- Route Admin ---
-
+# Untuk menambah atau mengedit kamar serta menghapus kamar dan reservasi yang berada pada dashboard admin
 @app.route('/admin/rooms/add_or_edit', methods=['POST'])
 @login_required
 def admin_room_crud():
-    """Menambah atau mengedit kamar (CRUD - Create/Update)."""
     if add_or_update_room(request.form):
         flash('Data kamar berhasil disimpan!', 'success')
     else:
@@ -169,10 +168,10 @@ def admin_room_crud():
         
     return redirect(url_for('admin_dashboard'))
 
+# untuk penghapusan kamar
 @app.route('/admin/rooms/delete/<int:room_id>')
 @login_required
 def admin_room_delete(room_id):
-    """Menghapus kamar (CRUD - Delete)."""
     if delete_room(room_id):
         flash(f'Kamar ID {room_id} dan reservasi terkait berhasil dihapus.', 'success')
     else:
@@ -180,10 +179,10 @@ def admin_room_delete(room_id):
         
     return redirect(url_for('admin_dashboard'))
 
+#Menghapus reservasi
 @app.route('/admin/reservations/delete/<int:res_id>')
 @login_required
 def admin_reservation_delete(res_id):
-    """Menghapus reservasi (CRUD - Delete)."""
     if delete_reservation(res_id):
         flash(f'Reservasi ID {res_id} berhasil dibatalkan.', 'success')
     else:

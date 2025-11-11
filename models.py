@@ -10,20 +10,21 @@ ROOMS = [
 
 RESERVATIONS = []
 
+# Fungsi Model untuk mengelola data kamar dan reservasi
+# Mengembalikan semua kamar
 def get_all_rooms():
-    """Mengembalikan semua kamar."""
     return ROOMS
 
+#mengembalikan kamar berdasarkan ID
 def get_room_by_id(room_id):
-    """Mengembalikan kamar berdasarkan ID."""
     return next((room for room in ROOMS if room["id"] == room_id), None)
 
+# Mengembalikan semua reservasi
 def get_all_reservations():
-    """Mengembalikan semua reservasi."""
     return RESERVATIONS
 
+# Cek ketersediaan kamar berdasarkan tanggal
 def is_room_available(room_id, check_in_str, check_out_str):
-    """Memeriksa ketersediaan kamar pada periode tertentu."""
     
     # Konversi tanggal ke dictonary date
     check_in = datetime.datetime.strptime(check_in_str, '%Y-%m-%d').date()
@@ -44,8 +45,8 @@ def is_room_available(room_id, check_in_str, check_out_str):
                 
     return True
 
+# Membuat reservasi baru
 def create_reservation(room_id, form_data):
-    """Menambahkan reservasi baru."""
     # Cek ketersediaan lagi sebelum membuat reservasi
     if not is_room_available(room_id, form_data['check_in'], form_data['check_out']):
         return None # Jika Kamar tidak tersedia
@@ -70,8 +71,8 @@ def create_reservation(room_id, form_data):
     RESERVATIONS.append(reservation)
     return reservation
 
+# Menambah atau mengedit kamar, Create/Update
 def add_or_update_room(room_data):
-    """Menambah atau mengedit kamar (CRUD - Create/Update)."""
     room_id = room_data.get('id')
     
     if room_id:
@@ -101,8 +102,8 @@ def add_or_update_room(room_data):
         
     return False
 
+# untuk menghapus kamar
 def delete_room(room_id):
-    """Menghapus kamar (CRUD - Delete)."""
     global ROOMS
     room_id = int(room_id)
     ROOMS = [room for room in ROOMS if room['id'] != room_id]
@@ -112,8 +113,8 @@ def delete_room(room_id):
     RESERVATIONS = [res for res in RESERVATIONS if res['room_id'] != room_id]
     return True
 
+# Menghapus reservasi
 def delete_reservation(res_id):
-    """Menghapus reservasi (CRUD - Delete)."""
     global RESERVATIONS
     res_id = int(res_id)
     initial_length = len(RESERVATIONS)
