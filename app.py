@@ -17,7 +17,7 @@ def login_required(f):
     dash.__name__ = f.__name__
     return dash
 
-# --- Routes User ---
+# --- Route User ---
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
