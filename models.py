@@ -1,140 +1,331 @@
 import datetime
-import random
+import pymysql
+from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
 
-# Dictonary statis untuk menyimpan data kamar dan reservasi
-ROOMS = [
-    {"id": 1, "name": "Standard", "price": 500000, "capacity": 2, "description": "Pilihan sempurna untuk pelancong yang mencari istirahat nyaman dan fungsional setelah seharian beraktivitas. Dilengkapi fasilitas dasar yang lengkap dan kamar mandi dalam yang bersih.", "img_url": "/static/standar.jpg"},
-    {"id": 2, "name": "Standard", "price": 500000, "capacity": 2, "description": "Pilihan sempurna untuk pelancong yang mencari istirahat nyaman dan fungsional setelah seharian beraktivitas. Dilengkapi fasilitas dasar yang lengkap dan kamar mandi dalam yang bersih.", "img_url": "/static/standar.jpg"},
-    {"id": 3, "name": "Standard", "price": 500000, "capacity": 2, "description": "Pilihan sempurna untuk pelancong yang mencari istirahat nyaman dan fungsional setelah seharian beraktivitas. Dilengkapi fasilitas dasar yang lengkap dan kamar mandi dalam yang bersih.", "img_url": "/static/standar.jpg"},
-    {"id": 4, "name": "Standard", "price": 500000, "capacity": 2, "description": "Pilihan sempurna untuk pelancong yang mencari istirahat nyaman dan fungsional setelah seharian beraktivitas. Dilengkapi fasilitas dasar yang lengkap dan kamar mandi dalam yang bersih.", "img_url": "/static/standar.jpg"},
-    {"id": 5, "name": "Superior", "price": 750000, "capacity": 4, "description": "Peningkatan dari Standard, menawarkan ruang gerak ekstra dan perabotan yang lebih modern. Nikmati suasana yang lebih tenang dan mungkin pemandangan yang lebih baik dari jendela Anda.", "img_url": "/static/superior.jpg"},
-    {"id": 6, "name": "Superior", "price": 750000, "capacity": 4, "description": "Peningkatan dari Standard, menawarkan ruang gerak ekstra dan perabotan yang lebih modern. Nikmati suasana yang lebih tenang dan mungkin pemandangan yang lebih baik dari jendela Anda.", "img_url": "/static/superior.jpg"},
-    {"id": 7, "name": "Superior", "price": 750000, "capacity": 4, "description": "Peningkatan dari Standard, menawarkan ruang gerak ekstra dan perabotan yang lebih modern. Nikmati suasana yang lebih tenang dan mungkin pemandangan yang lebih baik dari jendela Anda.", "img_url": "/static/superior.jpg"},
-    {"id": 8, "name": "Superior", "price": 750000, "capacity": 4, "description": "Peningkatan dari Standard, menawarkan ruang gerak ekstra dan perabotan yang lebih modern. Nikmati suasana yang lebih tenang dan mungkin pemandangan yang lebih baik dari jendela Anda.", "img_url": "/static/superior.jpg"},
-    {"id": 9, "name": "Delux", "price": 1000000, "capacity": 4, "description": "Kamar yang luas dengan desain mewah dan tempat tidur king/queen size premium. Ideal untuk relaksasi total, dilengkapi area duduk yang nyaman dan fasilitas kamar mandi yang ditingkatkan.", "img_url": "/static/delux1.jpg"},
-    {"id": 10, "name": "Delux", "price": 1000000, "capacity": 4, "description": "Kamar yang luas dengan desain mewah dan tempat tidur king/queen size premium. Ideal untuk relaksasi total, dilengkapi area duduk yang nyaman dan fasilitas kamar mandi yang ditingkatkan.", "img_url": "/static/delux1.jpg"},
-    {"id": 11, "name": "Delux", "price": 1000000, "capacity": 4, "description": "Kamar yang luas dengan desain mewah dan tempat tidur king/queen size premium. Ideal untuk relaksasi total, dilengkapi area duduk yang nyaman dan fasilitas kamar mandi yang ditingkatkan.", "img_url": "/static/delux1.jpg"},
-    {"id": 12, "name": "Delux", "price": 1000000, "capacity": 4, "description": "Kamar yang luas dengan desain mewah dan tempat tidur king/queen size premium. Ideal untuk relaksasi total, dilengkapi area duduk yang nyaman dan fasilitas kamar mandi yang ditingkatkan.", "img_url": "/static/delux1.jpg"},
-    {"id": 13, "name": "Suite", "price": 1500000, "capacity": 4, "description": "Suite sejati dengan kamar tidur utama dan ruang tamu/keluarga yang dipisahkan oleh pintu. Ideal untuk keluarga atau tamu yang menerima kunjungan, menawarkan privasi dan kemewahan tingkat tinggi.", "img_url": "/static/suite.jpg"},
-    {"id": 14, "name": "Suite", "price": 1500000, "capacity": 4, "description": "Suite sejati dengan kamar tidur utama dan ruang tamu/keluarga yang dipisahkan oleh pintu. Ideal untuk keluarga atau tamu yang menerima kunjungan, menawarkan privasi dan kemewahan tingkat tinggi.", "img_url": "/static/suite.jpg"},
-    {"id": 15, "name": "Suite", "price": 1500000, "capacity": 4, "description": "Suite sejati dengan kamar tidur utama dan ruang tamu/keluarga yang dipisahkan oleh pintu. Ideal untuk keluarga atau tamu yang menerima kunjungan, menawarkan privasi dan kemewahan tingkat tinggi.", "img_url": "/static/suite.jpg"},
-    {"id": 16, "name": "Suite", "price": 1500000, "capacity": 4, "description": "Suite sejati dengan kamar tidur utama dan ruang tamu/keluarga yang dipisahkan oleh pintu. Ideal untuk keluarga atau tamu yang menerima kunjungan, menawarkan privasi dan kemewahan tingkat tinggi.", "img_url": "/static/suite.jpg"},
-    {"id": 17, "name": "Presidential Suite", "price": 2500000, "capacity": 4, "description": "Kamar terbesar dan termewah di hotel kami. Menawarkan tata letak seperti apartemen, termasuk ruang makan, dapur kecil, kantor pribadi, dan layanan butler 24 jam. Puncak dari kemewahan dan privasi.", "img_url": "/static/president_suite.jpg"},
-    {"id": 18, "name": "Presidential Suite", "price": 2500000, "capacity": 4, "description": "Kamar terbesar dan termewah di hotel kami. Menawarkan tata letak seperti apartemen, termasuk ruang makan, dapur kecil, kantor pribadi, dan layanan butler 24 jam. Puncak dari kemewahan dan privasi.", "img_url": "/static/president_suite.jpg"},
-    {"id": 19, "name": "Presidential Suite", "price": 2500000, "capacity": 4, "description": "Kamar terbesar dan termewah di hotel kami. Menawarkan tata letak seperti apartemen, termasuk ruang makan, dapur kecil, kantor pribadi, dan layanan butler 24 jam. Puncak dari kemewahan dan privasi.", "img_url": "/static/president_suite.jpg"},
-    {"id": 20, "name": "Presidential Suite", "price": 2500000, "capacity": 4, "description": "Kamar terbesar dan termewah di hotel kami. Menawarkan tata letak seperti apartemen, termasuk ruang makan, dapur kecil, kantor pribadi, dan layanan butler 24 jam. Puncak dari kemewahan dan privasi.", "img_url": "/static/president_suite.jpg"},
-    {"id": 21, "name": "Presidential Suite", "price": 2500000, "capacity": 4, "description": "Kamar terbesar dan termewah di hotel kami. Menawarkan tata letak seperti apartemen, termasuk ruang makan, dapur kecil, kantor pribadi, dan layanan butler 24 jam. Puncak dari kemewahan dan privasi.", "img_url": "/static/president_suite.jpg"},
+
+def get_db_connection():
+    """
+    Membuat koneksi ke database MySQL
+    """
+    try:
+        connection = pymysql.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
+            charset='utf8mb4',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        return connection
+    except pymysql.Error as e:
+        print(f"Error connecting to database: {e}")
+        return None
+
+
+class Room:
+    """
+    Class untuk mengelola data kamar hotel
+    """
+    
+    @staticmethod
+    def get_all():
+        """
+        Mengambil semua data kamar dari database
+        """
+        connection = get_db_connection()
+        if not connection:
+            return []
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM rooms ORDER BY id")
+                rooms = cursor.fetchall()
+                return rooms
+        except Exception as e:
+            print(f"Error getting rooms: {e}")
+            return []
+        finally:
+            connection.close()
+    
+    @staticmethod
+    def get_by_id(room_id):
+        """
+        Mengambil data kamar berdasarkan ID
+        """
+        connection = get_db_connection()
+        if not connection:
+            return None
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM rooms WHERE id = %s", (room_id,))
+                room = cursor.fetchone()
+                return room
+        except Exception as e:
+            print(f"Error getting room by id: {e}")
+            return None
+        finally:
+            connection.close()
+    
+    @staticmethod
+    def is_available(room_id, check_in_str, check_out_str):
+        """
+        Mengecek ketersediaan kamar pada tanggal tertentu
+        """
+        try:
+            check_in = datetime.datetime.strptime(check_in_str, '%Y-%m-%d').date()
+            check_out = datetime.datetime.strptime(check_out_str, '%Y-%m-%d').date()
+            
+            # Validasi: check-in harus sebelum check-out
+            if check_in >= check_out:
+                return False
+            
+            connection = get_db_connection()
+            if not connection:
+                return False
+            
+            try:
+                with connection.cursor() as cursor:
+                    # Query untuk mencari tabrakan tanggal
+                    cursor.execute("""
+                        SELECT COUNT(*) as count FROM reservations
+                        WHERE room_id = %s
+                        AND check_in < %s
+                        AND check_out > %s
+                    """, (room_id, check_out_str, check_in_str))
+                    
+                    result = cursor.fetchone()
+                    return result['count'] == 0
+                    
+            finally:
+                connection.close()
+                
+        except ValueError:
+            return False
+        except Exception as e:
+            print(f"Error checking availability: {e}")
+            return False
+    
+    @staticmethod
+    def add_or_update(room_data):
+        """
+        Menambah atau mengupdate data kamar
+        """
+        connection = get_db_connection()
+        if not connection:
+            return False
+        
+        try:
+            with connection.cursor() as cursor:
+                room_id = room_data.get('id')
+                
+                if room_id:
+                    # UPDATE
+                    cursor.execute("""
+                        UPDATE rooms
+                        SET name = %s, price = %s, capacity = %s, description = %s
+                        WHERE id = %s
+                    """, (
+                        room_data['name'],
+                        int(room_data['price']),
+                        int(room_data['capacity']),
+                        room_data.get('description', ''),
+                        int(room_id)
+                    ))
+                else:
+                    # CREATE
+                    cursor.execute("""
+                        INSERT INTO rooms (name, price, capacity, description, img_url)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (
+                        room_data['name'],
+                        int(room_data['price']),
+                        int(room_data['capacity']),
+                        room_data.get('description', f"Kamar {room_data['name']} yang luar biasa."),
+                        room_data.get('img_url', '/static/default.jpg')
+                    ))
+                
+                connection.commit()
+                return True
+                
+        except Exception as e:
+            print(f"Error adding/updating room: {e}")
+            connection.rollback()
+            return False
+        finally:
+            connection.close()
+    
+    @staticmethod
+    def delete(room_id):
+        """
+        Menghapus kamar berdasarkan ID
+        Reservasi terkait akan terhapus otomatis karena ON DELETE CASCADE
+        """
+        connection = get_db_connection()
+        if not connection:
+            return False
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM rooms WHERE id = %s", (room_id,))
+                connection.commit()
+                return True
+                
+        except Exception as e:
+            print(f"Error deleting room: {e}")
+            connection.rollback()
+            return False
+        finally:
+            connection.close()
+
+
+class Reservation:
+    """
+    Class untuk mengelola data reservasi
+    """
+    
+    @staticmethod
+    def get_all():
+        """
+        Mengambil semua data reservasi
+        """
+        connection = get_db_connection()
+        if not connection:
+            return []
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT * FROM reservations 
+                    ORDER BY booking_date DESC, id DESC
+                """)
+                reservations = cursor.fetchall()
+                return reservations
+        except Exception as e:
+            print(f"Error getting reservations: {e}")
+            return []
+        finally:
+            connection.close()
+    
+    @staticmethod
+    def create(room_id, form_data):
+        """
+        Membuat reservasi baru
+        """
+        # Cek ketersediaan terlebih dahulu
+        if not Room.is_available(room_id, form_data['check_in'], form_data['check_out']):
+            return None
+        
+        room = Room.get_by_id(room_id)
+        if not room:
+            return None
+        
+        connection = get_db_connection()
+        if not connection:
+            return None
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO reservations 
+                    (room_id, room_name, check_in, check_out, guest_name, email, phone, guests, booking_date)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (
+                    room_id,
+                    room['name'],
+                    form_data['check_in'],
+                    form_data['check_out'],
+                    form_data['full_name'],
+                    form_data['email'],
+                    form_data['phone'],
+                    int(form_data['guests']),
+                    datetime.date.today().isoformat()
+                ))
+                
+                connection.commit()
+                
+                # Ambil ID yang baru dibuat
+                reservation_id = cursor.lastrowid
+                
+                # Return data reservasi lengkap
+                return {
+                    "id": reservation_id,
+                    "room_id": room_id,
+                    "room_name": room['name'],
+                    "check_in": form_data['check_in'],
+                    "check_out": form_data['check_out'],
+                    "guest_name": form_data['full_name'],
+                    "email": form_data['email'],
+                    "phone": form_data['phone'],
+                    "guests": int(form_data['guests']),
+                    "booking_date": datetime.date.today().isoformat()
+                }
+                
+        except Exception as e:
+            print(f"Error creating reservation: {e}")
+            connection.rollback()
+            return None
+        finally:
+            connection.close()
+    
+    @staticmethod
+    def delete(res_id):
+        """
+        Menghapus reservasi berdasarkan ID
+        """
+        connection = get_db_connection()
+        if not connection:
+            return False
+        
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM reservations WHERE id = %s", (res_id,))
+                connection.commit()
+                return cursor.rowcount > 0
+                
+        except Exception as e:
+            print(f"Error deleting reservation: {e}")
+            connection.rollback()
+            return False
+        finally:
+            connection.close()
+
+
+# Export semua fungsi yang dibutuhkan
+__all__ = [
+    'Room',
+    'Reservation',
+    'get_all_rooms',
+    'get_room_by_id',
+    'is_room_available',
+    'add_or_update_room',
+    'delete_room',
+    'get_all_reservations',
+    'create_reservation',
+    'delete_reservation'
 ]
 
-RESERVATIONS = []
-
-# Fungsi Model untuk mengelola data kamar dan reservasi
-# Mengembalikan semua kamar
+# Fungsi wrapper untuk kompatibilitas dengan kode lama
 def get_all_rooms():
-    return ROOMS
+    return Room.get_all()
 
-#mengembalikan kamar berdasarkan ID
 def get_room_by_id(room_id):
-    return next((room for room in ROOMS if room["id"] == room_id), None)
+    return Room.get_by_id(room_id)
 
-# Mengembalikan semua reservasi
-def get_all_reservations():
-    return RESERVATIONS
-
-# Cek ketersediaan kamar berdasarkan tanggal
 def is_room_available(room_id, check_in_str, check_out_str):
-    
-    # Konversi tanggal ke dictonary date
-    check_in = datetime.datetime.strptime(check_in_str, '%Y-%m-%d').date()
-    check_out = datetime.datetime.strptime(check_out_str, '%Y-%m-%d').date()
-    
-    # Validasi dasar: check-in harus sebelum check-out
-    if check_in >= check_out:
-        return False
-        
-    for res in RESERVATIONS:
-        if res["room_id"] == room_id:
-            res_in = datetime.datetime.strptime(res["check_in"], '%Y-%m-%d').date()
-            res_out = datetime.datetime.strptime(res["check_out"], '%Y-%m-%d').date()
+    return Room.is_available(room_id, check_in_str, check_out_str)
 
-            # handling logika tabrakan:
-            if check_in < res_out and check_out > res_in:
-                return False
-                
-    return True
-
-# Membuat reservasi baru
-def create_reservation(room_id, form_data):
-    # Cek ketersediaan lagi sebelum membuat reservasi
-    if not is_room_available(room_id, form_data['check_in'], form_data['check_out']):
-        return None # Jika Kamar tidak tersedia
-    new_id = random.randint(100, 999) # ID Reservasi acak
-    room = get_room_by_id(room_id)
-    if not room:
-        return None
-        
-    reservation = {
-        "id": new_id,
-        "room_id": room_id,
-        "room_name": room['name'],
-        "check_in": form_data['check_in'],
-        "check_out": form_data['check_out'],
-        "guest_name": form_data['full_name'],
-        "email": form_data['email'],
-        "phone": form_data['phone'],
-        "guests": int(form_data['guests']),
-        "booking_date": datetime.date.today().isoformat()
-    }
-    
-    RESERVATIONS.append(reservation)
-    return reservation
-
-# Menambah atau mengedit kamar, Create/Update
 def add_or_update_room(room_data):
-    room_id = room_data.get('id')
-    
-    if room_id:
-        # UPDATE
-        room_id = int(room_id)
-        room = get_room_by_id(room_id)
-        if room:
-            room.update({
-                "name": room_data['name'],
-                "price": int(room_data['price']),
-                "capacity": int(room_data['capacity']),
-                "description": room_data.get('description', room['description'])
-            })
-            return True
-    else:
-        # CREATE
-        new_id = ROOMS[-1]['id'] + 1 if ROOMS else 1
-        new_room = {
-            "id": new_id,
-            "name": room_data['name'],
-            "price": int(room_data['price']),
-            "capacity": int(room_data['capacity']),
-            "description": f"Kamar {room_data['name']} yang luar biasa."
-        }
-        ROOMS.append(new_room)
-        return True
-        
-    return False
+    return Room.add_or_update(room_data)
 
-# untuk menghapus kamar
 def delete_room(room_id):
-    global ROOMS
-    room_id = int(room_id)
-    ROOMS = [room for room in ROOMS if room['id'] != room_id]
+    return Room.delete(room_id)
 
-    # Hapus juga reservasi terkait
-    global RESERVATIONS
-    RESERVATIONS = [res for res in RESERVATIONS if res['room_id'] != room_id]
-    return True
+def get_all_reservations():
+    return Reservation.get_all()
 
-# Menghapus reservasi
+def create_reservation(room_id, form_data):
+    return Reservation.create(room_id, form_data)
+
 def delete_reservation(res_id):
-    global RESERVATIONS
-    res_id = int(res_id)
-    initial_length = len(RESERVATIONS)
-    RESERVATIONS = [res for res in RESERVATIONS if res['id'] != res_id]
-    return len(RESERVATIONS) < initial_length
+    return Reservation.delete(res_id)

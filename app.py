@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import datetime
-from models import get_all_rooms, get_room_by_id, is_room_available, create_reservation, get_all_reservations, add_or_update_room, delete_room, delete_reservation
+import models
 
 app = Flask(__name__)
 app.secret_key = 'Sundanese' 
@@ -44,13 +44,13 @@ def index():
         search_params.update({'check_in': check_in, 'check_out': check_out, 'guests': guests})
 
         if check_in and check_out:
-            all_rooms = get_all_rooms()
+            all_rooms = models.get_all_rooms()
             
             for room in all_rooms:
                 # 1. Cek Kapasitas
                 if room['capacity'] >= guests:
                     # 2. Cek Ketersediaan
-                    if is_room_available(room['id'], check_in, check_out):
+                    if models.is_room_available(room['id'], check_in, check_out):
                         available_rooms.append(room)
             
             if not available_rooms:
@@ -62,7 +62,7 @@ def index():
 
 @app.route('/book/<int:room_id>', methods=['GET'])
 def booking(room_id):
-    room = get_room_by_id(room_id)
+    room = models.get_room_by_id(room_id)
     
     # Ambil parameter tanggal dari URL (jika ada)
     check_in = request.args.get('check_in')
@@ -83,7 +83,7 @@ def booking(room_id):
         flash('Format tanggal tidak valid.', 'danger')
         return redirect(url_for('index'))
 
-    if not is_room_available(room_id, check_in, check_out):
+    if not models.is_room_available(room_id, check_in, check_out):
         flash('Kamar tidak tersedia pada tanggal yang dipilih. Silakan coba tanggal lain.', 'danger')
         return redirect(url_for('index'))
         
@@ -104,7 +104,7 @@ def reserve():
         'phone': request.form.get('phone')
     }
     
-    reservation = create_reservation(room_id, form_data)
+    reservation = models.create_reservation(room_id, form_data)
     
     if reservation:
         flash(f'Reservasi berhasil! ID Anda: {reservation["id"]}. Mohon cek email Anda.', 'success')
@@ -145,14 +145,14 @@ def admin_logout():
 @app.route('/admin/dashboard', methods=['GET'])
 @login_required
 def admin_dashboard():
-    rooms = get_all_rooms()
-    reservations = get_all_reservations()
+    rooms = models.get_all_rooms()
+    reservations = models.get_all_reservations()
     
     # Ambil data kamar untuk pre-fill form edit (jika ada parameter edit_id)
     edit_room = None
     edit_id = request.args.get('edit_id', type=int)
     if edit_id:
-        edit_room = get_room_by_id(edit_id)
+        edit_room = models.get_room_by_id(edit_id)
 
     return render_template('admin/dashboard.html', rooms=rooms, reservations=reservations, edit_room=edit_room)
 
@@ -161,7 +161,7 @@ def admin_dashboard():
 @app.route('/admin/rooms/add_or_edit', methods=['POST'])
 @login_required
 def admin_room_crud():
-    if add_or_update_room(request.form):
+    if models.add_or_update_room(request.form):
         flash('Data kamar berhasil disimpan!', 'success')
     else:
         flash('Gagal menyimpan data kamar.', 'danger')
@@ -172,7 +172,7 @@ def admin_room_crud():
 @app.route('/admin/rooms/delete/<int:room_id>')
 @login_required
 def admin_room_delete(room_id):
-    if delete_room(room_id):
+    if models.delete_room(room_id):
         flash(f'Kamar ID {room_id} dan reservasi terkait berhasil dihapus.', 'success')
     else:
         flash('Gagal menghapus kamar.', 'danger')
@@ -183,7 +183,7 @@ def admin_room_delete(room_id):
 @app.route('/admin/reservations/delete/<int:res_id>')
 @login_required
 def admin_reservation_delete(res_id):
-    if delete_reservation(res_id):
+    if models.delete_reservation(res_id):
         flash(f'Reservasi ID {res_id} berhasil dibatalkan.', 'success')
     else:
         flash('Gagal membatalkan reservasi.', 'danger')
