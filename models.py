@@ -2,18 +2,15 @@ import datetime
 import pymysql
 from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
 
-
+# Membuat koneksi ke database MySQL
 def get_db_connection():
-    """
-    Membuat koneksi ke database MySQL
-    """
+    
     try:
         connection = pymysql.connect(
             host=DB_HOST,
             user=DB_USER,
             password=DB_PASSWORD,
             database=DB_NAME,
-            charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
         return connection
@@ -21,17 +18,13 @@ def get_db_connection():
         print(f"Error connecting to database: {e}")
         return None
 
-
+# Class untuk mengelola data kamar hotel
 class Room:
-    """
-    Class untuk mengelola data kamar hotel
-    """
     
+#Mengambil semua data kamar dari database
     @staticmethod
     def get_all():
-        """
-        Mengambil semua data kamar dari database
-        """
+
         connection = get_db_connection()
         if not connection:
             return []
@@ -46,12 +39,10 @@ class Room:
             return []
         finally:
             connection.close()
-    
+# Mengambil data kamar berdasarkan ID
     @staticmethod
     def get_by_id(room_id):
-        """
-        Mengambil data kamar berdasarkan ID
-        """
+
         connection = get_db_connection()
         if not connection:
             return None
@@ -67,11 +58,10 @@ class Room:
         finally:
             connection.close()
     
+#Mengecek ketersediaan kamar pada tanggal tertentu
     @staticmethod
     def is_available(room_id, check_in_str, check_out_str):
-        """
-        Mengecek ketersediaan kamar pada tanggal tertentu
-        """
+
         try:
             check_in = datetime.datetime.strptime(check_in_str, '%Y-%m-%d').date()
             check_out = datetime.datetime.strptime(check_out_str, '%Y-%m-%d').date()
@@ -154,13 +144,10 @@ class Room:
             return False
         finally:
             connection.close()
-    
+#Menghapus kamar berdasarkan ID Reservasi terkait akan terhapus otomatis karena ON DELETE CASCADE
     @staticmethod
     def delete(room_id):
-        """
-        Menghapus kamar berdasarkan ID
-        Reservasi terkait akan terhapus otomatis karena ON DELETE CASCADE
-        """
+
         connection = get_db_connection()
         if not connection:
             return False
