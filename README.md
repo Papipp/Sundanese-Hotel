@@ -8,6 +8,6 @@
       <li>Novan Banyoe Respati</li>
 </ol>
 
-<div class="container align-item-center py-5">
-<img src="/static/logo.png" alt="logo" width="300px">
+<div class="container">
+<p class="align-items-center text-primary">Penambahan Database</p>
 </div>

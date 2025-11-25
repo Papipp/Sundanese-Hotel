@@ -95,12 +95,10 @@ class Room:
         except Exception as e:
             print(f"Error checking availability: {e}")
             return False
-    
+
+# Menambah atau mengupdate data kamar
     @staticmethod
     def add_or_update(room_data):
-        """
-        Menambah atau mengupdate data kamar
-        """
         connection = get_db_connection()
         if not connection:
             return False
@@ -131,19 +129,20 @@ class Room:
                         room_data['name'],
                         int(room_data['price']),
                         int(room_data['capacity']),
-                        room_data.get('description', f"Kamar {room_data['name']} yang luar biasa."),
-                        room_data.get('img_url', '/static/default.jpg')
+                        room_data.get('description', f"Kamar {room_data['name']}"),
+                        room_data.get('img_url', '/static/bg-hotel.png')
                     ))
                 
                 connection.commit()
                 return True
                 
         except Exception as e:
-            print(f"Error adding/updating room: {e}")
+            print(f"Error add/update room: {e}")
             connection.rollback()
             return False
         finally:
             connection.close()
+
 #Menghapus kamar berdasarkan ID Reservasi terkait akan terhapus otomatis karena ON DELETE CASCADE
     @staticmethod
     def delete(room_id):
@@ -159,23 +158,17 @@ class Room:
                 return True
                 
         except Exception as e:
-            print(f"Error deleting room: {e}")
+            print(f"Error delete room: {e}")
             connection.rollback()
             return False
         finally:
             connection.close()
 
-
+# Class untuk mengelola data reservasi
 class Reservation:
-    """
-    Class untuk mengelola data reservasi
-    """
     
     @staticmethod
-    def get_all():
-        """
-        Mengambil semua data reservasi
-        """
+    def get_all():  
         connection = get_db_connection()
         if not connection:
             return []
@@ -193,12 +186,11 @@ class Reservation:
             return []
         finally:
             connection.close()
-    
+
+# Membuat reservasi baru
     @staticmethod
     def create(room_id, form_data):
-        """
-        Membuat reservasi baru
-        """
+     
         # Cek ketersediaan terlebih dahulu
         if not Room.is_available(room_id, form_data['check_in'], form_data['check_out']):
             return None
@@ -254,12 +246,10 @@ class Reservation:
             return None
         finally:
             connection.close()
-    
+
+# Menghapus reservasi berdasarkan  ID
     @staticmethod
     def delete(res_id):
-        """
-        Menghapus reservasi berdasarkan ID
-        """
         connection = get_db_connection()
         if not connection:
             return False
@@ -292,7 +282,7 @@ __all__ = [
     'delete_reservation'
 ]
 
-# Fungsi wrapper untuk kompatibilitas dengan kode lama
+# Fungsi wrapper untuk kompatibilitas dengan kode lama, karena disinio saya mhanya mengganti models dan app nya saja, tyidak dengan html atau template jinjanya.
 def get_all_rooms():
     return Room.get_all()
 
